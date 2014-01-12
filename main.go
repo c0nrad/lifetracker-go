@@ -77,6 +77,6 @@ func main() {
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/a/", accomplishmentHandler)
 
-	fmt.Println("Starting server on port :7774")
-	http.ListenAndServe(":7774", nil)
+	fmt.Println("Starting server on port :7776")
+	http.ListenAndServe(":7776", nil)
 }
