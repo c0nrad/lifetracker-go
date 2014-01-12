@@ -6,6 +6,7 @@ import (
 	"labix.org/v2/mgo"
 	"labix.org/v2/mgo/bson"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -46,6 +47,22 @@ func accomplishmentHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusFound)
 }
 
+func emailHandler(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+
+	f, err := os.OpenFile("emails.txt", os.O_APPEND|os.O_WRONLY, 0600)
+	if err != nil {
+		panic(err)
+	}
+
+	defer f.Close()
+
+	if _, err = f.WriteString(r.Form["email"][0] + "\n"); err != nil {
+		panic(err)
+	}
+	fmt.Fprintf(w, "Email saved!")
+}
+
 func initMGO() *mgo.Session {
 	session, err := mgo.Dial("127.0.0.1:27017")
 	if err != nil {
@@ -59,7 +76,7 @@ func initMGO() *mgo.Session {
 
 func findRecent() []Accomplishment {
 	var results []Accomplishment
-	err := session.DB("test").C("accomplishments").Find(bson.M{}).All(&results)
+	err := session.DB("test").C("accomplishments").Find(bson.M{}).Limit(10).Sort("Date").All(&results)
 
 	if err != nil {
 		panic(err)
@@ -74,6 +91,7 @@ func main() {
 
 	http.Handle("/static/", http.FileServer(http.Dir(".")))
 
+	http.HandleFunc("/email", emailHandler)
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/a/", accomplishmentHandler)
 
