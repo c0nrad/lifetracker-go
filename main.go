@@ -67,9 +67,14 @@ func findRecent() []Accomplishment {
 }
 
 func main() {
+	fmt.Println("LOL NO WAI")
 	session = initMGO()
+
+	http.Handle("/static/", http.FileServer(http.Dir(".")))
+
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/a/", accomplishmentHandler)
-	fmt.Println("Starting server on port :7776")
-	http.ListenAndServe(":7776", nil)
+
+	fmt.Println("Starting server on port :7774")
+	http.ListenAndServe(":7774", nil)
 }
