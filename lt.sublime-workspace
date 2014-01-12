@@ -1,0 +1,1166 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"getPrintabe",
+				"getPrintableKeys"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"contents": "package main\n\nimport (\n	\"fmt\"\n	\"html/template\"\n	\"labix.org/v2/mgo\"\n	\"labix.org/v2/mgo/bson\"\n	\"net/http\"\n)\n\ntype Accomplishment struct {\n	ID   bson.ObjectId `bson:\"_id,omitempty\"`\n	Body string\n	Name string\n}\n\nvar session *mgo.Session\nvar templates = template.Must(template.ParseFiles(\"./templates/base.html\", \"./templates/index.html\", \"./templates/accomplishment.html\", \"./templates/addAccomplishment.html\"))\n\nfunc indexHandler(w http.ResponseWriter, r *http.Request) {\n	fmt.Printf(\"Serving / %v\\n\", r.Method)\n	recent := findRecent()\n\n	err := templates.ExecuteTemplate(w, \"base.html\", recent)\n	if err != nil {\n		panic(err)\n	}\n}\n\nfunc accomplishmentHandler(w http.ResponseWriter, r *http.Request) {\n	fmt.Println(\"Serving\", r.URL, r.Method, \"\\n\")\n\n	if r.Method == \"POST\" {\n		r.ParseForm()\n		fmt.Println(r.Form, r.Form[\"accomplishment\"])\n		c := session.DB(\"test\").C(\"accomplishments\")\n		err := c.Insert(&Accomplishment{\"\", r.Form[\"accomplishment\"][0], r.Form[\"name\"][0]})\n		if err != nil {\n			panic(err)\n		}\n	} else {\n\n	}\n	fmt.Fprintf(w, \"Good Work!\")\n}\n\nfunc initMGO() *mgo.Session {\n	session, err := mgo.Dial(\"127.0.0.1:27017\")\n	if err != nil {\n		panic(err)\n	}\n\n	session.SetMode(mgo.Monotonic, true)\n\n	return session\n}\n\nfunc findRecent() []Accomplishment {\n	var results []Accomplishment\n	err := session.DB(\"test\").C(\"accomplishments\").Find(bson.M{}).All(&results)\n\n	if err != nil {\n		panic(err)\n	}\n\n	return results\n}\n\nfunc main() {\n	session = initMGO()\n	http.HandleFunc(\"/\", indexHandler)\n	http.HandleFunc(\"/a/\", accomplishmentHandler)\n\n	http.Handle(\"/static\", http.FileServer(http.Dir(\"./static/\")))\n\n	fmt.Println(\"Starting server on port :7776\")\n	http.ListenAndServe(\":7776\", nil)\n}\n",
+			"file": "/home/c0nrad/Projects/lifetracker-go/main.go",
+			"file_size": 1617,
+			"file_write_time": 130339670089858848,
+			"settings":
+			{
+				"buffer_size": 1683,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/c0nrad/Projects/lifetracker-go/templates/base.html",
+			"settings":
+			{
+				"buffer_size": 305,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/c0nrad/Projects/lifetracker-go/templates/addAccomplishment.html",
+			"settings":
+			{
+				"buffer_size": 212,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "#! /usr/bin/fish\nset -x GOROOT /usr/lib/go\nset -x GOPATH /home/c0nrad/Projects/lifetracker-go\n",
+			"file": "/home/c0nrad/Projects/lifetracker-go/setup.sh",
+			"file_size": 94,
+			"file_write_time": 130339321612008533,
+			"settings":
+			{
+				"buffer_size": 94,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/c0nrad/Projects/lifetracker-go/templates/index.html",
+			"settings":
+			{
+				"buffer_size": 60,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/c0nrad/Projects/lifetracker-go/templates/accomplishment.html",
+			"settings":
+			{
+				"buffer_size": 141,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "Packages/User/go.sublime-build",
+	"command_palette":
+	{
+		"height": 54.0,
+		"selected_items":
+		[
+			[
+				"install pac",
+				"Package Control: Install Package"
+			],
+			[
+				"install pa",
+				"Package Control: Install Package"
+			],
+			[
+				"install packa",
+				"Package Control: Install Package"
+			],
+			[
+				"install package",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 647.0
+	},
+	"console":
+	{
+		"height": 139.0,
+		"history":
+		[
+			"import urllib.request,os; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); open(os.path.join(ipp, pf), 'wb').write(urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ','%20')).read())",
+			"import urllib2,os; pf='Package Control.sublime-package'; ipp=sublime.installed_packages_path(); os.makedirs(ipp) if not os.path.exists(ipp) else None; urllib2.install_opener(urllib2.build_opener(urllib2.ProxyHandler())); open(os.path.join(ipp,pf),'wb').write(urllib2.urlopen('http://sublime.wbond.net/'+pf.replace(' ','%20')).read()); print 'Please restart Sublime Text to finish installation'"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/c0nrad/Projects/lifetracker-go/setup.sh",
+		"/home/c0nrad/Projects/Matasano/questions2.txt",
+		"/home/c0nrad/Projects/Matasano/lyrics.txt",
+		"/home/c0nrad/Projects/Matasano/watch.sh",
+		"/home/c0nrad/Projects/Matasano/solutions.py",
+		"/home/c0nrad/Projects/Matasano/gistfile5.txt",
+		"/home/c0nrad/Projects/Matasano/matasano.sublime-project",
+		"/home/c0nrad/Projects/matasano/questions2.txt",
+		"/home/c0nrad/Projects/matasano/gistfile4.txt",
+		"/home/c0nrad/Projects/matasano/questions.txt",
+		"/home/c0nrad/Projects/matasano/solutions.py",
+		"/home/c0nrad/.config/sublime-text-3/Packages/Package Control/Package Control.sublime-settings",
+		"/home/c0nrad/.config/sublime-text-3/Packages/Terminal/Default (Linux).sublime-keymap",
+		"/home/c0nrad/Projects/matasano/gistfile1.txt",
+		"/home/c0nrad/Projects/matasano/gistfile2.txt",
+		"/home/c0nrad/Projects/matasano/.hg/.hgrc",
+		"/home/c0nrad/.hgrc",
+		"/home/c0nrad/Projects/matasano/gistfile3.txt",
+		"/home/c0nrad/Projects/matasano/watchScript.sh"
+	],
+	"find":
+	{
+		"height": 39.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"templates.",
+			"key",
+			"os.",
+			"true",
+			"cbc",
+			"aesDecrypt",
+			"ecbDec",
+			".",
+			"/c",
+			"jzONGDqSyGlkaxG8WZXVB",
+			"jzONGDqSyGlkaxG8WZXVB+",
+			"jzONGDqSyGlkaxG8WZXVB+D",
+			"jzONGDqSyGlkaxG8WZXVB+D/",
+			"jzONGDqSyGlkaxG",
+			"jzONGDqSyGlkaxG*",
+			"jzONGDqSyGlkaxG8WZXVBy9j9VKh1",
+			"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",
+			"jzONGDq",
+			"'\\x8f3",
+			"\")",
+			"aesDecrypt",
+			"repeatXor"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/home/c0nrad/Projects/lifetracker-go/main.go",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1683,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1599,
+								1599
+							]
+						],
+						"settings":
+						{
+							"auto_name": "",
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"spell_check": true,
+							"sublime_auto_complete": true,
+							"syntax": "Packages/GoSublime/syntax/GoSublime-Go.tmLanguage",
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 864.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/home/c0nrad/Projects/lifetracker-go/templates/base.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 305,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								305,
+								305
+							]
+						],
+						"settings":
+						{
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"sublime_auto_complete": true,
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/home/c0nrad/Projects/lifetracker-go/templates/addAccomplishment.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 212,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								34,
+								34
+							]
+						],
+						"settings":
+						{
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"sublime_auto_complete": true,
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/home/c0nrad/Projects/lifetracker-go/setup.sh",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 94,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								17,
+								17
+							]
+						],
+						"settings":
+						{
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"sublime_auto_complete": true,
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "/home/c0nrad/Projects/lifetracker-go/templates/index.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 60,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								52,
+								52
+							]
+						],
+						"settings":
+						{
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"sublime_auto_complete": true,
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "/home/c0nrad/Projects/lifetracker-go/templates/accomplishment.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 141,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								83,
+								83
+							]
+						],
+						"settings":
+						{
+							"auto_name": "",
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"sublime_auto_complete": true,
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 32.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 146.0
+	},
+	"output.markdown":
+	{
+		"height": 108.0
+	},
+	"project": "lt.sublime-project",
+	"replace":
+	{
+		"height": 60.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"",
+				"{'6\\x06\\xa1\\xe8\\xbd\\x83v\\x07\"\\x87\\x02\\xc2\\x12\\x05["
+			],
+			[
+				"sol",
+				"~/Projects/Matasano/matasano.sublime-project"
+			],
+			[
+				"solution",
+				"solutions.py"
+			],
+			[
+				"que",
+				"questions2.txt"
+			],
+			[
+				"solutions.py",
+				"solutions.py"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+			[
+				"",
+				"~/Projects/cc/cc.sublime-project"
+			],
+			[
+				"rsp",
+				"~/Projects/rsp/rsp.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

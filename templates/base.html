@@ -1,13 +1,16 @@
 <html>
   <head>
     <title> LifeTracker </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/lifetracker.css" rel="stylesheet">
+
   </head>
 
   <body>
     <h1> LifeTracker! </h1>
     <p> Write down what you accomplished today! </p>
     {{ template "index.html" .}}
-    <hr>
     {{ template "addAccomplishment.html" .}}
   </body>
 

@@ -6,12 +6,14 @@ import (
 	"labix.org/v2/mgo"
 	"labix.org/v2/mgo/bson"
 	"net/http"
+	"time"
 )
 
 type Accomplishment struct {
 	ID   bson.ObjectId `bson:"_id,omitempty"`
 	Body string
 	Name string
+	Date time.Time
 }
 
 var session *mgo.Session
@@ -34,14 +36,14 @@ func accomplishmentHandler(w http.ResponseWriter, r *http.Request) {
 		r.ParseForm()
 		fmt.Println(r.Form, r.Form["accomplishment"])
 		c := session.DB("test").C("accomplishments")
-		err := c.Insert(&Accomplishment{"", r.Form["accomplishment"][0], r.Form["name"][0]})
+		err := c.Insert(&Accomplishment{"", r.Form["accomplishment"][0], r.Form["name"][0], time.Now()})
 		if err != nil {
 			panic(err)
 		}
 	} else {
 
 	}
-	fmt.Fprintf(w, "Good Work!")
+	http.Redirect(w, r, "/", http.StatusFound)
 }
 
 func initMGO() *mgo.Session {
