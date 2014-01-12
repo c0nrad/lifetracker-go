@@ -1,6 +1,9 @@
 <span class="accomplishment" style="display:inline-block; padding: 20px">
   <p class="sticky taped2" style="width: 300px;">
     {{.Body}}
+    {{ if .ImagePath}}
+      <a href="{{.ImagePath}}"> <img src="{{ .ImagePath }}" width="250px"> </a>
+    {{end}}
     <br>
     <small> - {{.Name}} </small>
   </p>

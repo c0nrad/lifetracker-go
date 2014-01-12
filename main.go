@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"html/template"
+	"io/ioutil"
 	"labix.org/v2/mgo"
 	"labix.org/v2/mgo/bson"
 	"net/http"
@@ -11,10 +12,11 @@ import (
 )
 
 type Accomplishment struct {
-	ID   bson.ObjectId `bson:"_id,omitempty"`
-	Body string
-	Name string
-	Date time.Time
+	ID        bson.ObjectId `bson:"_id,omitempty"`
+	Body      string
+	Name      string
+	Date      time.Time
+	ImagePath string
 }
 
 var session *mgo.Session
@@ -34,10 +36,29 @@ func accomplishmentHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Serving", r.URL, r.Method, "\n")
 
 	if r.Method == "POST" {
+		filename := ""
 		r.ParseForm()
 		fmt.Println(r.Form, r.Form["accomplishment"])
+
+		file, handler, err := r.FormFile("file")
+		if err != nil {
+			// No file upload
+		} else {
+			data, err := ioutil.ReadAll(file)
+			if err != nil {
+				fmt.Println(err, "2")
+			}
+			filename = "./static/uploads/" + handler.Filename
+			err = ioutil.WriteFile(filename, data, 0777)
+			if err != nil {
+				fmt.Println(err)
+			}
+		}
+
 		c := session.DB("test").C("accomplishments")
-		err := c.Insert(&Accomplishment{"", r.Form["accomplishment"][0], r.Form["name"][0], time.Now()})
+		newAccomplishment := &Accomplishment{"", r.Form["accomplishment"][0], r.Form["name"][0], time.Now(), filename}
+		fmt.Println("Inserting new accomplishment:", newAccomplishment)
+		err = c.Insert(newAccomplishment)
 		if err != nil {
 			panic(err)
 		}
@@ -76,7 +97,7 @@ func initMGO() *mgo.Session {
 
 func findRecent() []Accomplishment {
 	var results []Accomplishment
-	err := session.DB("test").C("accomplishments").Find(bson.M{}).Limit(10).Sort("Date").All(&results)
+	err := session.DB("test").C("accomplishments").Find(bson.M{}).Sort("-date").All(&results)
 
 	if err != nil {
 		panic(err)
