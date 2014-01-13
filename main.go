@@ -1,8 +1,11 @@
 package main
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"fmt"
 	"html/template"
+	"io"
 	"io/ioutil"
 	"labix.org/v2/mgo"
 	"labix.org/v2/mgo/bson"
@@ -19,8 +22,21 @@ type Accomplishment struct {
 	ImagePath string
 }
 
+type User struct {
+	ID       bson.ObjectId `bson:"_id,omitempty"`
+	Email    string
+	Password string
+}
+
 var session *mgo.Session
 var templates = template.Must(template.ParseFiles("./templates/base.html", "./templates/index.html", "./templates/accomplishment.html", "./templates/addAccomplishment.html"))
+
+func generateImageHash(filename string) string {
+	h := md5.New()
+	io.WriteString(h, filename)
+	io.WriteString(h, time.Now().String())
+	return hex.EncodeToString(h.Sum(nil))
+}
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("Serving / %v\n", r.Method)
@@ -48,7 +64,8 @@ func accomplishmentHandler(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				fmt.Println(err, "2")
 			}
-			filename = "./static/uploads/" + handler.Filename
+
+			filename = "./static/uploads/" + generateImageHash(handler.Filename)
 			err = ioutil.WriteFile(filename, data, 0777)
 			if err != nil {
 				fmt.Println(err)
