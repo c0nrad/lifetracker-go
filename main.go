@@ -68,6 +68,8 @@ func loadUser(r *http.Request) {
 
 func makeHandler(fn func(http.ResponseWriter, *http.Request) error) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		var user User
+		currentUser = user
 		fmt.Println("Serving:", r.Method, r.URL)
 		sessionCookie, err := r.Cookie("ltsession")
 		if err != nil {
@@ -93,6 +95,11 @@ func main() {
 	http.HandleFunc("/signup", makeHandler(signupHandler))
 	http.HandleFunc("/logout", makeHandler(logoutHandler))
 
-	fmt.Println("Starting server on port :7776")
-	http.ListenAndServe(":7776", nil)
+	if len(os.Args) >= 2 {
+		fmt.Println("Starting server on port", os.Args[1])
+		http.ListenAndServe(os.Args[1], nil)
+	} else {
+		fmt.Println("Starting server on port :7776")
+		http.ListenAndServe("7776", nil)
+	}
 }
