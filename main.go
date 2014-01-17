@@ -97,9 +97,9 @@ func main() {
 
 	if len(os.Args) >= 2 {
 		fmt.Println("Starting server on port", os.Args[1])
-		http.ListenAndServe(os.Args[1], nil)
+		http.ListenAndServe(":"+os.Args[1], nil)
 	} else {
 		fmt.Println("Starting server on port :7776")
-		http.ListenAndServe("7776", nil)
+		http.ListenAndServe(":7776", nil)
 	}
 }
