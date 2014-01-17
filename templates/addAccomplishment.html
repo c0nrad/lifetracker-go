@@ -8,7 +8,7 @@
 
   <div>
     <label for="nameInput"> Name </label>
-    <input id="nameInput" class="form-control" name="name" type="text" value="Anonymous"> <br>
+    <input id="nameInput" class="form-control" name="name" type="text" value="{{if .User.Name }}{{.User.Name}}{{else}}Anonymous{{ end }}"> <br>
   </div>
 
   <div>
