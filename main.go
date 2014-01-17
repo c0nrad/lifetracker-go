@@ -26,22 +26,6 @@ func indexHandler(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
-func emailHandler(w http.ResponseWriter, r *http.Request) error {
-	r.ParseForm()
-
-	f, err := os.OpenFile("emails.txt", os.O_APPEND|os.O_WRONLY, 0600)
-	if err != nil {
-		return err
-	}
-
-	defer f.Close()
-
-	if _, err = f.WriteString(r.Form["email"][0] + "\n"); err != nil {
-		return err
-	}
-	return nil
-}
-
 func initMGO() *mgo.Session {
 	session, err := mgo.Dial("127.0.0.1:27017")
 	if err != nil {
@@ -49,6 +33,15 @@ func initMGO() *mgo.Session {
 	}
 
 	session.SetMode(mgo.Monotonic, true)
+
+	index := mgo.Index{
+		Key:        []string{"email"},
+		Unique:     true,
+		DropDups:   true,
+		Background: true, // See notes.
+	}
+
+	err = session.DB("test").C("users").EnsureIndex(index)
 
 	return session
 }
@@ -88,9 +81,8 @@ func main() {
 	mongoSession = initMGO()
 
 	http.Handle("/static/", http.FileServer(http.Dir(".")))
-	http.HandleFunc("/email", makeHandler(emailHandler))
 	http.HandleFunc("/", makeHandler(indexHandler))
-	http.HandleFunc("/a/", makeHandler(accomplishmentHandler))
+	http.HandleFunc("/a", makeHandler(accomplishmentHandler))
 	http.HandleFunc("/login", makeHandler(loginHandler))
 	http.HandleFunc("/signup", makeHandler(signupHandler))
 	http.HandleFunc("/logout", makeHandler(logoutHandler))
