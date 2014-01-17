@@ -1,8 +1,12 @@
 package main
 
 import (
+	"crypto/md5"
+	"encoding/hex"
+
 	"errors"
 	"fmt"
+	"io"
 	"labix.org/v2/mgo/bson"
 	"net/http"
 	"regexp"
@@ -19,8 +23,14 @@ const RE_BASIC_EMAIL = `(?i)[A-Z0-9._%+-]+@(?:[A-Z0-9-]+\.)+[A-Z]{2,6}`
 
 func authenticate(email, password string) (User, error) {
 	var user User
-	err := mongoSession.DB("test").C("users").Find(bson.M{"email": email, "password": password}).One(&user)
+	err := mongoSession.DB("test").C("users").Find(bson.M{"email": email, "password": passwordHash(password)}).One(&user)
 	return user, err
+}
+
+func passwordHash(password string) string {
+	h := md5.New()
+	io.WriteString(h, password)
+	return hex.EncodeToString(h.Sum(nil))
 }
 
 func validateEmail(email string) bool {
@@ -40,7 +50,7 @@ func addUser(name, email, password string) (User, error) {
 		return newUser, errors.New("Invalid email address")
 	}
 
-	newUser = User{"", name, email, password}
+	newUser = User{"", name, email, passwordHash(password)}
 	err := mongoSession.DB("test").C("users").Insert(newUser)
 	return newUser, err
 }
