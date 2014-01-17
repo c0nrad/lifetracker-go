@@ -46,19 +46,6 @@ func initMGO() *mgo.Session {
 	return session
 }
 
-func loadUser(r *http.Request) {
-	sessionCookie, err := r.Cookie("ltsession")
-	if err != nil {
-		fmt.Println("loadUser: ", err)
-	} else {
-		currentUser = sessionTokenToUser(sessionCookie.Value)
-		if err != nil {
-			fmt.Println("loadUser:", err)
-			currentUser = User{}
-		}
-	}
-}
-
 func makeHandler(fn func(http.ResponseWriter, *http.Request) error) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var user User
