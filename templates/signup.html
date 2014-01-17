@@ -1,8 +1,21 @@
 <div id="loginForm">
   <form method="post" action="/signup">
-    <input type="text" name="name" placeholder="Name">
-    <input type="text" name="email" placeholder="Email">
-    <input type="text" name="password" placeholder="Password">
-    <button type="submit">Submit</button>
+    
+    <div>
+<!--       <label for="nameInput"> Name </label>-->      
+      <input id="nameInput" type="text" name="name" class="form-control" placeholder="Name">
+    </div>
+  
+    <div>
+      <!--  <label for="emailInput"> Email </label> -->
+      <input class="form-control" id="emailInput" type="text" name="email" placeholder="Email">
+    </div>
+
+    <div>
+      <!-- <label for="passwordInput"> Password </label> -->
+      <input class="form-control" id="passwordInput" type="password" name="password" placeholder="Password">
+    </div>
+      
+    <button class="btn btn-default pull-left" type="submit">Submit</button>
   </form>
 </div>

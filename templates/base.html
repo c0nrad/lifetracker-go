@@ -7,81 +7,22 @@
 
   </head>
 
-  <body>
+  <body style="background: #C2ABD1">
     <div class="row">
-      <div class="col-md-2 well">
-        <h1> LifeTracker! </h1>
-        
-<!--         <ul>
-          <li> <a href="#" class="active">Home</a> </li>
-          <li> <a href="#" class="active">Calendar</a> </li>
-          <li> <a href="#" class="active">Happiness</a> </li>
-        </ul>
- -->
-
-        <div class="panel-group" id="accordion">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-                  How it Works
-                </a>
-              </h4>
-            </div>
-            <div id="collapseOne" class="panel-collapse collapse">
-              <div class="panel-body">
-                Write down what you accomplished today! And everyday, from now on.
-              </div>
-            </div>
-          </div>
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-                  Why
-                </a>
-              </h4>
-            </div>
-            <div id="collapseTwo" class="panel-collapse collapse">
-              <div class="panel-body">
-                <p> Do you remember what you did the day exactly a week ago? How about the day before that? </p>
-                <p> The idea behind LifeTracker is to try to make every day memerable. </p>
-              </div>
-            </div>
-          </div>
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
-                  How
-                </a>
-              </h4>
-            </div>
-            <div id="collapseThree" class="panel-collapse collapse">
-              <div class="panel-body">
-                <p> Every day you write down the single most important thing that happened that day. </p>
-                <p> Be it you explored a new part of town, made a new friend, or finished your weight loss goal. </p>              </div>
-            </div>
-          </div>
+      <div class="col-md-2">
+        <div class="well">
+          <h1> LifeTracker! </h1>
+            {{ if .User.Name }}
+              <p> Welcome back <strong> {{ .User.Name }} </strong> </p>
+              <a href="/logout"> Logout </a>
+            {{ else }}
+              {{template "login.html" .}}
+            {{ end }}
+            <br>
+            {{ template "howItWorks.html" .}}
         </div>
-          {{ if .User.Name }}
-            <p> Welcome Back {{ .User.Name }} </p>
-            <a href="/logout"> Logout </a>
-          {{ else }}
-            {{template "login.html" .}}
-          {{ end }}
-<!--         <div>
-          <hr>
-          <p> Want updates on this project? Enter your email below! </p>
-          <form id="emailForm" action="/email" method="POST">
-            <input name="email" type="text" class="form-control"> <br>
-            <button type="submit" class="btn btn-default">Submit</button>
-          </form>
-          <div id="emailFormFinished"> </div>
-        </div> -->
       </div>
-
-      <div class="col-md-10">
+      <div class="col-md-10" style="right: 15px">
         {{ template "addAccomplishment.html" .}}
         {{ template "index.html" .}}
       </div>
@@ -90,7 +31,6 @@
   </body>
 
   <footer>
-    <p> c0nrad - 2013 </p>
   </footer>
 
   <script src="/static/js/jquery.js" type="text/javascript"></script>
