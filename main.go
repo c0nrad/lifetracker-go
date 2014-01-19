@@ -10,7 +10,7 @@ import (
 
 var mongoSession *mgo.Session
 var currentUser User
-var templates = template.Must(template.ParseFiles("./templates/howItWorks.html", "./templates/signup.html", "./templates/login.html", "./templates/base.html", "./templates/index.html", "./templates/accomplishment.html", "./templates/addAccomplishment.html"))
+var templates = template.Must(template.ParseFiles("./templates/calendar.html", "./templates/howItWorks.html", "./templates/signup.html", "./templates/login.html", "./templates/base.html", "./templates/index.html", "./templates/accomplishment.html", "./templates/addAccomplishment.html"))
 
 func indexHandler(w http.ResponseWriter, r *http.Request) error {
 	recent := findRecent()

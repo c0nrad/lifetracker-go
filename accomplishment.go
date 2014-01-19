@@ -28,51 +28,74 @@ func generateImageHash(filename string) string {
 	return hex.EncodeToString(h.Sum(nil))
 }
 
+func saveImage(r *http.Request) string {
+	filename := ""
+	file, handler, err := r.FormFile("file")
+	if err != nil {
+	} else {
+		data, err := ioutil.ReadAll(file)
+		if err != nil {
+			fmt.Println("saveImage:", err)
+			return ""
+		}
+
+		filename = "./static/uploads/" + generateImageHash(handler.Filename)
+		if err = ioutil.WriteFile(filename, data, 0777); err != nil {
+			fmt.Println("saveImage:", err)
+			return ""
+		}
+	}
+	return filename
+}
+
+func validateAccomplishment(a *Accomplishment) error {
+	if a.Body == "" {
+		return errors.New("There must be an accomplishment")
+	}
+
+	if a.Name == "" {
+		a.Name = "Anonymous"
+	}
+
+	return nil
+}
+
+func buildAccomplishment(accomplishment, name, filename string) (*Accomplishment, error) {
+	newAccomplishment := &Accomplishment{"", accomplishment, name, time.Now(), filename, ""}
+
+	if isEmptyUser(currentUser) {
+		newAccomplishment.UserID = ""
+	} else {
+		newAccomplishment.UserID = currentUser.ID
+	}
+
+	if err := validateAccomplishment(newAccomplishment); err != nil {
+		return nil, err
+	}
+
+	return newAccomplishment, nil
+}
+
 func accomplishmentHandler(w http.ResponseWriter, r *http.Request) error {
 
 	if r.Method == "POST" {
-		filename := ""
 		r.ParseForm()
-		fmt.Println(r.Form, r.Form["accomplishment"])
 
-		file, handler, err := r.FormFile("file")
-		if err != nil {
-		} else {
-			data, err := ioutil.ReadAll(file)
-			if err != nil {
-				return err
-			}
-
-			filename = "./static/uploads/" + generateImageHash(handler.Filename)
-			if err = ioutil.WriteFile(filename, data, 0777); err != nil {
-				return err
-			}
-		}
-
-		fmt.Println(r.Form)
-
+		filename := saveImage(r)
 		accomplishment := r.FormValue("accomplishment")
 		name := r.FormValue("name")
 
-		if accomplishment == "" {
-			return errors.New("There must be an Accomplishment")
-		}
-
-		if name == "" {
-			name = "Anonymous"
-		}
-
-		var newAccomplishment *Accomplishment
-		if isEmptyUser(currentUser) {
-			newAccomplishment = &Accomplishment{"", accomplishment, name, time.Now(), filename, ""}
-		} else {
-			newAccomplishment = &Accomplishment{"", accomplishment, name, time.Now(), filename, currentUser.ID}
-		}
-		fmt.Println("Inserting new accomplishment:", newAccomplishment)
-		if err = mongoSession.DB("test").C("accomplishments").Insert(newAccomplishment); err != nil {
-			fmt.Println("AQUI AQUI")
+		newAccomplishment, err := buildAccomplishment(accomplishment, name, filename)
+		if err != nil {
 			return err
 		}
+
+		fmt.Println("Inserting new accomplishment:", newAccomplishment)
+		if err := mongoSession.DB("test").C("accomplishments").Insert(newAccomplishment); err != nil {
+			return err
+		}
+	} else if r.Method == "GET" {
+
 	}
 	http.Redirect(w, r, "/", http.StatusFound)
 	return nil
