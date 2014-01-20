@@ -37,12 +37,12 @@
   <script type="text/template" id="accomplishment-template">
     <span class="item accomplishment" style="display:inline-block; padding: 20px">
       <p class="sticky taped2" style="width: 300px;">
-        <%= Body %>
+        <%- Body %>
         <% if (ImagePath != "") { %>
           <a href="<%= ImagePath %>"> <img src="<%= ImagePath %>" width="250px"> </a>
         <% } %>
         <br>
-        <small> - <%=Name%> on <span class="date"> <%=Date%> </span> </small>
+        <small> - <%-Name%> on <span class="date"> <%=Date%> </span> </small>
       </p>
     </span>
   </script>
