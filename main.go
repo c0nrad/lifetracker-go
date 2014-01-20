@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"labix.org/v2/mgo"
@@ -14,10 +15,16 @@ var templates = template.Must(template.ParseFiles("./templates/calendar.html", "
 
 func indexHandler(w http.ResponseWriter, r *http.Request) error {
 	recent := findRecent()
+	recentJSON, err := json.Marshal(recent)
+
+	if err != nil {
+		return err
+	}
 
 	params := map[string]interface{}{
-		"Recent": recent,
-		"User":   currentUser,
+		"Recent":     recent,
+		"RecentJSON": string(recentJSON),
+		"User":       currentUser,
 	}
 
 	if err := templates.ExecuteTemplate(w, "base.html", params); err != nil {
