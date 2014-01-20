@@ -67,6 +67,7 @@ func buildAccomplishment(accomplishment, name, filename string) (*Accomplishment
 		newAccomplishment.UserID = ""
 	} else {
 		newAccomplishment.UserID = currentUser.ID
+		newAccomplishment.Name = currentUser.Name
 	}
 
 	if err := validateAccomplishment(newAccomplishment); err != nil {
