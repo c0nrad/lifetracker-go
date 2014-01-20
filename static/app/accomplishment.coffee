@@ -39,6 +39,7 @@ $(document).ready ->
   app.accomplishmentsView = new app.AccomplishmentsView
 
   container = document.querySelector('#accomplishments');
-  msnry = new Masonry container, 
-    columnWidth: 75,
-    itemSelector: '.item'
+  imagesLoaded container, ->
+    msnry = new Masonry container, 
+      columnWidth: 75,
+      itemSelector: '.item'
