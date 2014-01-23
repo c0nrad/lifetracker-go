@@ -53,6 +53,10 @@ func validateAccomplishment(a *Accomplishment) error {
 		return errors.New("There must be an accomplishment")
 	}
 
+	if len(a.Body) > 200 {
+		a.Body = a.Body[0:200]
+	}
+
 	if a.Name == "" {
 		a.Name = "Anonymous"
 	}

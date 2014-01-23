@@ -11,7 +11,7 @@ import (
 
 var mongoSession *mgo.Session
 var currentUser User
-var templates = template.Must(template.ParseFiles("./templates/calendar.html", "./templates/howItWorks.html", "./templates/signup.html", "./templates/login.html", "./templates/base.html", "./templates/index.html", "./templates/accomplishment.html", "./templates/addAccomplishment.html"))
+var templates = template.Must(template.ParseFiles("./templates/calendar.html", "./templates/howItWorks.html", "./templates/signup.html", "./templates/login.html", "./templates/base.html", "./templates/index.html", "./templates/accomplishmentTemplate.html", "./templates/addAccomplishment.html"))
 
 func indexHandler(w http.ResponseWriter, r *http.Request) error {
 	recent := findRecent()
@@ -49,7 +49,6 @@ func initMGO() *mgo.Session {
 	}
 
 	err = session.DB("test").C("users").EnsureIndex(index)
-
 	return session
 }
 
@@ -67,7 +66,6 @@ func makeHandler(fn func(http.ResponseWriter, *http.Request) error) http.Handler
 		if err = fn(w, r); err != nil {
 			http.Error(w, err.Error(), 500)
 		}
-
 	}
 }
 

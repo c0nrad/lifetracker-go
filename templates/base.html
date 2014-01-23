@@ -14,41 +14,45 @@
           <h1> LifeTracker! </h1>
             {{ if .User.Name }}
               <p> Welcome back <strong> {{ .User.Name }} </strong> </p>
+              <a href="/#/public"> Public </a> <br>
+              <a href="/#/calendar"> Calendar </a> <br >
               <a href="/logout"> Logout </a>
             {{ else }}
               {{template "login.html" .}}
+              {{ template "howItWorks.html" .}}
             {{ end }}
             <br>
-            {{ template "howItWorks.html" .}}
+          <hr>
+          <h4> Updates! </h4>
+          <ul>
+            <li> Calendar view sort of works! Read Only </li>
+          </ul>
         </div>
       </div>
-      <div class="col-md-10" style="right: 15px">
-        {{ template "addAccomplishment.html" .}}
-        <div id="accomplishments">
+      <div id="content" class="col-md-10" style="right: 15px">
+      
+        <div id="calendarView" style="display:none;">
+          {{ template "calendar.html" .}}
         </div>
+
+        <div id="publicView" style="display:none;">
+          {{ template "addAccomplishment.html" .}}
+          <div id="accomplishments">
+          </div>
+        </div>
+
       </div>
     </div>
-
   </body>
 
   <footer>
   </footer>
 
-  <script type="text/template" id="accomplishment-template">
-    <span class="item accomplishment" style="display:inline-block; padding: 20px">
-      <p class="sticky taped2" style="width: 300px;">
-        <%- Body %>
-        <% if (ImagePath != "") { %>
-          <a href="<%= ImagePath %>"> <img src="<%= ImagePath %>" width="250px"> </a>
-        <% } %>
-        <br>
-        <small> - <%-Name%> on <span class="date"> <%=Date%> </span> </small>
-      </p>
-    </span>
-  </script>
+    {{ template "accomplishmentTemplate.html" . }}
 
   <script>
     window.accomplishmentData = {{.Recent}};
+    window.userData = {{.User}};
   </script>
 
   <script src="/static/js/jquery.js" type="text/javascript"></script>
@@ -60,5 +64,7 @@
   <script src="/static/js/imagesloaded.min.js" type="text/javascript"></script>
 
   <script src="/static/app/accomplishment.js" type="text/javascript"></script>
+  <script src="/static/app/calendar.js" type="text/javascript"></script>
+  <script src="/static/app/lifetracker.js" type="text/javascript"></script>
 
 </html>

@@ -3,29 +3,79 @@
   $(document).ready(function() {
     var app;
     app = window || {};
-    app.Accomplishment = Backbone.Model.extend({
+    app.CalendarModel = Backbone.Model.extend({
       defaults: function() {
         return {
-          Name: "Anonymous",
-          Body: "I worked on calendar view....",
-          Date: new Date(),
-          ImagePath: ""
+          currMonth: moment().format('MMMM'),
+          currYear: moment().format('YYYY'),
+          currDay: moment().format('DD')
         };
+      },
+      firstCellBlock: function() {
+        var dayName, days, firstDay;
+        days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        firstDay = "" + (this.get('currMonth')) + " 1 " + (this.get('currYear'));
+        dayName = moment(firstDay).format('dddd');
+        return days.indexOf(dayName);
       }
     });
-    app.Accomplishments = Backbone.Collection.extend({
-      model: app.Accomplishment
+    app.CalendarCellView = Backbone.View.extend({
+      template: _.template($('#calendarCell-template').html()),
+      initialize: function() {},
+      render: function() {
+        $(this.el).html(this.template({
+          day: this.model.day,
+          body: this.model.body
+        }));
+        return this;
+      }
     });
-    app.AccomplishmentView = Backbone.View.extend({
-      tagName: "div",
-      className: "accomplishment",
-      template: _.template($('#accomplishment-template').html()),
+    app.CalendarView = Backbone.View.extend({
+      el: $('#calendarView'),
       initialize: function() {
-        return console.log("LOL NO WAI I AM AN ACCOMPLISHMENT VIEW!");
+        return this.model = new app.CalendarModel();
+      },
+      hide: function() {
+        return $(this.el).hide();
+      },
+      unhide: function() {
+        return $(this.el).show();
+      },
+      render: function() {
+        var cellView, currAccomplishment, currDay, firstCellNumber, firstDay, x, _i, _ref;
+        $(this.el).find("#calendarTitle").text("" + (this.model.get('currMonth')) + " " + (this.model.get('currYear')));
+        firstDay = moment("" + (this.model.get('currMonth')) + " 1 " + (this.model.get('currYear')));
+        currDay = firstDay;
+        firstCellNumber = this.model.firstCellBlock();
+        for (x = _i = 0, _ref = firstDay.daysInMonth(); 0 <= _ref ? _i <= _ref : _i >= _ref; x = 0 <= _ref ? ++_i : --_i) {
+          cellView = new app.CalendarCellView({
+            model: {
+              day: x
+            }
+          });
+          currAccomplishment = app.accomplishments.getAccomplishment(currDay);
+          if (currAccomplishment != null) {
+            cellView = new app.CalendarCellView({
+              model: {
+                day: x,
+                body: currAccomplishment.get('Body')
+              }
+            });
+          } else {
+            cellView = new app.CalendarCellView({
+              model: {
+                day: x,
+                body: ""
+              }
+            });
+          }
+          $(this.el).find("#cell" + (x + firstCellNumber)).html(cellView.render().el);
+          currDay.add('days', 1);
+        }
+        return this.unhide();
       }
     });
-    app.accomplishmentView = new app.AccomplishmentView();
-    return app.accomplishments = new app.Accomplishments(app.accomplishmentData);
+    return app.calendarView = new app.CalendarView;
   });
 
 }).call(this);

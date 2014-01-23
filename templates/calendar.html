@@ -1,72 +1,75 @@
-<TABLE BORDER=3 CELLSPACING=3 CELLPADDING=3> 
-<TR>
-<TD COLSPAN="7" ALIGN=center><B> December 2001 </B></TD> 
-</TR>
-<TR> 
-<TD COLSPAN="7" ALIGN=center><I>Another year comes to an end</I></TD>
-</TR>
-<TR> 
-<TD ALIGN=center>Sun</TD>
-<TD ALIGN=center>Mon</TD>
-<TD ALIGN=center>Tue</TD>
-<TD ALIGN=center>Wed</TD>
-<TD ALIGN=center>Thu</TD>
-<TD ALIGN=center>Fri</TD>
-<TD ALIGN=center>Sat</TD>
-</TR>
-<TR> 
-<TD ALIGN=center></TD>
-<TD ALIGN=center></TD>
-<TD ALIGN=center></TD>
-<TD ALIGN=center></TD>
-<TD ALIGN=center></TD>
-<TD ALIGN=center></TD>
-<TD ALIGN=center>1</TD>
-</TR>
-<TR> 
-<TD ALIGN=center>2</TD>
-<TD ALIGN=center>3</TD>
-<TD ALIGN=center>4</TD>
-<TD ALIGN=center>5</TD>
-<TD ALIGN=center>6</TD>
-<TD ALIGN=center>7</TD>
-<TD ALIGN=center>8</TD>
-</TR>
-<TR> 
-<TD ALIGN=center>9</TD>
-<TD ALIGN=center>10</TD>
-<TD ALIGN=center>11</TD>
-<TD ALIGN=center>12</TD>
-<TD ALIGN=center>13</TD>
-<TD ALIGN=center>14</TD>
-<TD ALIGN=center>15</TD>
-</TR>
-<TR> 
-<TD ALIGN=center>16</TD>
-<TD ALIGN=center>17</TD>
-<TD ALIGN=center>18</TD>
-<TD ALIGN=center>19</TD>
-<TD ALIGN=center>20</TD>
-<TD ALIGN=center>21</TD>
-<TD ALIGN=center>22</TD>
-</TR>
-<TR> 
-<TD ALIGN=center>23</TD>
-<TD ALIGN=center>24</TD>
-<TD ALIGN=center>25</TD>
-<TD ALIGN=center>26</TD>
-<TD ALIGN=center>27</TD>
-<TD ALIGN=center>28</TD>
-<TD ALIGN=center>29</TD>
-</TR>
-<TR> 
-<TD ALIGN=center>30</TD>
-<TD ALIGN=center>31</TD>
-<TD ALIGN=center></TD>
-<TD ALIGN=center></TD>
-<TD ALIGN=center></TD>
-<TD ALIGN=center></TD>
-<TD ALIGN=center></TD>
-
-</TR>
+<table width="100%" id="calendar" border=3> 
+  <tr>
+    <th id="calendarTitle" colspan="7" align=center><B> December 2001 </B></td> 
+  </tr>
+  <tr> 
+    <th align=center>Sun</th>
+    <th align=center>Mon</th>
+    <th align=center>Tue</th>
+    <th align=center>Wed</th>
+    <th align=center>Thu</th>
+    <th align=center>Fri</th>
+    <th align=center>Sat</th>
+  </tr>
+  <tr> 
+    <td id="cell0" ></td>
+    <td id="cell1" align=center></td>
+    <td id="cell2" align=center></td>
+    <td id="cell3" align=center></td>
+    <td id="cell4" align=center></td>
+    <td id="cell5" align=center></td>
+    <td id="cell6" align=center></td>
+  </tr>
+  <tr> 
+    <td id="cell7" align=center></td>
+    <td id="cell8" align=center></td>
+    <td id="cell9" align=center></td>
+    <td id="cell10" align=center></td>
+    <td id="cell11" align=center></td>
+    <td id="cell12" align=center></td>
+    <td id="cell13" align=center></td>
+  </tr>
+  <tr> 
+    <td id="cell14" align=center></td>
+    <td id="cell15"></td>
+    <td id="cell16" align=center></td>
+    <td id="cell17" align=center></td>
+    <td id="cell18" align=center></td>
+    <td id="cell19" align=center></td>
+    <td id="cell20" align=center></td>
+  </tr>
+  <tr> 
+    <td id="cell21" align=center></td>
+    <td id="cell22" align=center></td>
+    <td id="cell23" align=center></td>
+    <td id="cell24" align=center></td>
+    <td id="cell25" align=center></td>
+    <td id="cell26" align=center></td>
+    <td id="cell27" align=center></td>
+  </tr>
+  <tr> 
+    <td id="cell28" align=center></td>
+    <td id="cell29" align=center></td>
+    <td id="cell30" align=center></td>
+    <td id="cell31" align=center></td>
+    <td id="cell32" align=center></td>
+    <td id="cell33" align=center></td>
+    <td id="cell34" align=center></td>
+  </tr>
+  <tr> 
+    <td id="cell35" align=center></td>
+    <td id="cell36" align=center></td>
+    <td id="cell37" align=center></td>
+    <td id="cell38" align=center></td>
+    <td id="cell39" align=center></td>
+    <td id="cell40" align=center></td>
+    <td id="cell41" align=center></td>
+  </tr>
 </TABLE>
+
+<script type="text/template" id="calendarCell-template"> 
+  <div class="calendarCell">
+    <div class="calendarDay"> <%- day %> </div> <br>
+    <div class="calendarBody"> <%- body %> </div>
+  </div>
+</script>

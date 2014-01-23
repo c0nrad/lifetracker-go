@@ -11,6 +11,12 @@ $(document).ready ->
   app.Accomplishments = Backbone.Collection.extend
     model: app.Accomplishment
 
+    getAccomplishment: (date) ->
+      @find (model) ->
+        a = moment(model.get('Date'))
+        b = moment(date)
+        a.month() == b.month() and b.year() == a.year() and a.dayOfYear() == b.dayOfYear() 
+
   app.AccomplishmentView = Backbone.View.extend
     tagName: "div"
     className: "accomplishment"
@@ -25,21 +31,31 @@ $(document).ready ->
       @
 
   app.AccomplishmentsView = Backbone.View.extend
-    el: $("#accomplishments")
+    el: $("#publicView")
 
     initialize: ->
-      @collection = new app.Accomplishments app.accomplishmentData
-      @render()
+      @collection = app.accomplishments = new app.Accomplishments app.accomplishmentData
+
+    hide: ->
+      $(@el).hide()
+
+    unhide: ->
+      $(@el).show()
 
     render: ->
+      $(@el).find("#accomplishments").html("")
       @collection.each (model) =>
         accomplishmentView = new app.AccomplishmentView {model: model}
-        $(@el).append accomplishmentView.render().el 
+        $(@el).find("#accomplishments").append accomplishmentView.render().el 
+
+      container = document.querySelector('#accomplishments');
+      imagesLoaded container, ->
+        msnry = new Masonry container, 
+          columnWidth: 75,
+          itemSelector: '.item'
+      @unhide()
+
 
   app.accomplishmentsView = new app.AccomplishmentsView
 
-  container = document.querySelector('#accomplishments');
-  imagesLoaded container, ->
-    msnry = new Masonry container, 
-      columnWidth: 75,
-      itemSelector: '.item'
+  
