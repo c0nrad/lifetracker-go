@@ -36,7 +36,7 @@
       }
     });
     app.AccomplishmentsView = Backbone.View.extend({
-      el: $("#publicView"),
+      el: $("#boardView"),
       initialize: function() {
         return this.collection = app.accomplishments = new app.Accomplishments(app.accomplishmentData);
       },

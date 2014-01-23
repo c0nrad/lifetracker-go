@@ -3,9 +3,9 @@ $(document).ready ->
 
   app.Router = Backbone.Router.extend
     routes:
-      "": "loadPublic"
+      "": "loadBoard"
       "calendar": "loadCalendar"
-      "public": "loadPublic"
+      "board": "loadBoard"
 
     hideAll: ->
       app.calendarView.hide()
@@ -14,12 +14,10 @@ $(document).ready ->
     loadCalendar: ->
       @hideAll()
       app.calendarView.render()
-      console.log "LOAD CALENDAR MUTHERFUCKER"
 
-    loadPublic: ->
+    loadBoard: ->
       @hideAll()
       app.accomplishmentsView.render()
-      console.log "LOAD PUBLIC MUTHERFUCKER"
 
   app.router = new app.Router
   Backbone.history.start();

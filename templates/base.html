@@ -14,7 +14,7 @@
           <h1> LifeTracker! </h1>
             {{ if .User.Name }}
               <p> Welcome back <strong> {{ .User.Name }} </strong> </p>
-              <a href="/#/public"> Public </a> <br>
+              <a href="/#/board"> My Board </a> <br>
               <a href="/#/calendar"> Calendar </a> <br >
               <a href="/logout"> Logout </a>
             {{ else }}
@@ -35,7 +35,7 @@
           {{ template "calendar.html" .}}
         </div>
 
-        <div id="publicView" style="display:none;">
+        <div id="boardView" style="display:none;">
           {{ template "addAccomplishment.html" .}}
           <div id="accomplishments">
           </div>

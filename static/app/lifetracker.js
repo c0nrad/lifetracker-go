@@ -5,9 +5,9 @@
     app = app || window;
     app.Router = Backbone.Router.extend({
       routes: {
-        "": "loadPublic",
+        "": "loadBoard",
         "calendar": "loadCalendar",
-        "public": "loadPublic"
+        "board": "loadBoard"
       },
       hideAll: function() {
         app.calendarView.hide();
@@ -15,13 +15,11 @@
       },
       loadCalendar: function() {
         this.hideAll();
-        app.calendarView.render();
-        return console.log("LOAD CALENDAR MUTHERFUCKER");
+        return app.calendarView.render();
       },
-      loadPublic: function() {
+      loadBoard: function() {
         this.hideAll();
-        app.accomplishmentsView.render();
-        return console.log("LOAD PUBLIC MUTHERFUCKER");
+        return app.accomplishmentsView.render();
       }
     });
     app.router = new app.Router;

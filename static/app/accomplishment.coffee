@@ -31,7 +31,7 @@ $(document).ready ->
       @
 
   app.AccomplishmentsView = Backbone.View.extend
-    el: $("#publicView")
+    el: $("#boardView")
 
     initialize: ->
       @collection = app.accomplishments = new app.Accomplishments app.accomplishmentData
